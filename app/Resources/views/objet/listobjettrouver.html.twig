@@ -1,0 +1,251 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    List trouver
+{% endblock %}
+
+{% block body %}
+    <!-- PAGE TITLE -->
+    <section id="page-title" class="page-title-parallax page-title-center text-dark" style="background-image:url({{ asset('bundles/framework/images/parallax/page-title-parallax.jpg') }});">
+        <div class="container">
+            <div class="page-title col-md-8">
+                <h1>List objet trouver recommendé</h1>
+                <span>Découvrir les objet touver triées par algorithme de récommandation</span>
+            </div>
+        </div>
+    </section>
+    <!-- END: PAGE TITLE -->
+
+
+    {% for objetmatch in objets_100 %}
+        <div class="col-md-4">
+            <div style="width: 60%" class="product">
+                <div class="product-image">
+                    <span class="product-new">R</span>
+                    <div class="carousel" data-carousel-col="1" data-lightbox-type="gallery">
+
+                        {% if objetmatch.images == '' and objetmatch.image2 == '' and objetmatch.image3 == ''  %}
+                            <img class="img-rounded" src="{{ asset('bundles/framework/images/shop/products/nopicture.jpg') }}" alt="">
+                        {% else %}
+
+                        {% if objetmatch.images != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objetmatch.images.path }}" alt="">{% endif %}
+                        {% if objetmatch.image2 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objetmatch.image2.path }}" alt="">{% endif %}
+                        {% if objetmatch.image3 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objetmatch.image3.path }}" alt="">{% endif %}
+
+                        {% endif %}
+                        <!--
+                        <a href="images/shop/products/product-large.jpg" title="Shop product image!"><img alt="Shop product image!" src="images/shop/products/1.jpg">
+                        </a>
+
+                        <a href="images/shop/products/product-large.jpg" title="Shop product image!"><img alt="Shop product image!" src="images/shop/products/2.jpg">
+                        </a>
+                        -->
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <b><i class="fa fa-clock"></i> Lieu et date de la perte :</b>
+                    <div class="product-category">{{ objetmatch.date | date }}</div>
+                    <div class="row">
+                        <div class="product-category col-md-6">{{ objetmatch.gouvernorat }}</div>
+                        <div class="product-category col-md-6">{{ objetmatch.cond }}</div>
+                    </div>
+                    <b><i class="fa fa-eye"></i> Description de l'objet :</b>
+                    <div class="product-category">{{ objetmatch.categorie.nom }}</div>
+                    <div class="product-category row"><div class="col-md-6"><a href="#" data-target="#{{ objetmatch.id }}" data-toggle="modal" class="btn btn-warning btn-xs">Description...</a></div>
+                       <!-- <div class="col-md-6"><a data-target="#{{ objetmatch.id }}1" data-toggle="modal" class="btn btn-success btn-xs" href="">info user</a></div>-->
+                        <div class="col-md-6">
+
+                            {% set i=0 %}
+                            {% for contact in contactdejaenvoyer %}
+                                {% if contact.userenvoyer == user and contact.objetreceive == objetmatch or contact.userreceive == user and contact.objetenvoyer == objetmatch  %}
+                                    {% set i=1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if i == 0 %}
+                                <a href="{{ path('contacter',{'idreceive' : objetmatch.user.id , 'objetenvoyer' : objectevoyer.id , 'objetreceive': objetmatch.id , 'type' : 'littrouver'  }) }}" class="btn btn-success btn-xs center">Demande Contact</a>
+                            {% else %}
+                                {% set k=0 %}
+                                {% for test in contactdejaenvoyer  %}
+                                    {% if test.userenvoyer.id == user.id  and objectevoyer == test.objetenvoyer and objetmatch == test.objetreceive %}
+                                        {% set k=1 %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if k == 1 %}
+                                <a href="{{ path('annuler_invibuttonlist',{'idreceive' : objetmatch.user.id , 'objetreceive': objetmatch.id, 'objetenvoyer' : objectevoyer.id }) }}" class="btn btn-danger btn-xs center">Annuler la demande</a>
+                                {% endif %}
+                                {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="{{ objetmatch.id }}" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-label">description</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p>{{ objetmatch.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-b" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="{{ objetmatch.id }}1" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-label">Contactez</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-md-6 center">
+                                    <br>
+                                    <div class="image-box circle-image small">
+                                        <img class="" src="{{ asset('bundles/framework/images/user.jpg') }}" alt="">
+                                    </div>
+                                    <div class="image-box-description text-center">
+                                        <h4>{{ objetmatch.user.prenom }} {{ objetmatch.user.nom }}</h4>
+                                        <br>
+                                        <p class="subtitle"><i class="fa fa-icon-phone"></i>{{ objetmatch.user.telephone }}</p>
+                                        <p class="subtitle"><i class="fa fa-icon-envelope"></i>{{ objetmatch.user.email }}</p>
+                                        <hr class="line">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-b" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+    {% for objet in objets_50 %}
+        <div class="col-md-4">
+            <div style="width: 60%" class="product">
+                <div class="product-image">
+                    <div class="carousel" data-carousel-col="1" data-lightbox-type="gallery">
+                        {% if objet.images == '' and objet.image2 == '' and objet.image3 == ''  %}
+                            <img class="img-rounded" src="{{ asset('bundles/framework/images/shop/products/nopicture.jpg') }}" alt="">
+                        {% else %}
+
+                            {% if objet.images != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.images.path }}" alt="">{% endif %}
+                            {% if objet.image2 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.image2.path }}" alt="">{% endif %}
+                            {% if objet.image3 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.image3.path }}" alt="">{% endif %}
+
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <b><i class="fa fa-clock"></i> Lieu et date de la perte :</b>
+                    <div class="product-category">{{ objet.date | date }}</div>
+                    <div class="row">
+                        <div class="product-category col-md-6">{{ objet.gouvernorat }}</div>
+                        <div class="product-category col-md-6">{{ objet.cond }}</div>
+                    </div>
+                    <b><i class="fa fa-eye"></i> Description de l'objet :</b>
+                    <div class="product-category">{{ objet.categorie.nom }}</div>
+                    <div class="product-category row"><div class="col-md-6"><a href="#" data-target="#{{ objet.id }}" data-toggle="modal" class="btn btn-warning btn-xs">Description...</a></div>
+                        <!--<div class="col-md-6"><a data-target="#{{ objet.id }}1" data-toggle="modal" class="btn btn-success btn-xs" href="">info user</a></div>-->
+                    <div class="col-md-6">
+                        {% set i=0 %}
+                        {% for contact in contactdejaenvoyer %}
+                            {% if contact.userenvoyer == user and contact.objetreceive == objet or contact.userreceive == user and contact.objetenvoyer == objet  %}
+                                {% set i=1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if i == 0 %}
+                            <a href="{{ path('contacter',{'idreceive' : objet.user.id , 'objetenvoyer' : objectevoyer.id , 'objetreceive': objet.id , 'type' : 'listtrouver'  }) }}" class="btn btn-success btn-xs center">Demande Contact</a>
+                        {% else %}
+                            {% set k=0 %}
+                            {% for test in contactdejaenvoyer  %}
+                                {% if test.userenvoyer.id == user.id  and objectevoyer == test.objetenvoyer and objet == test.objetreceive %}
+                                    {% set k=1 %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if k == 1 %}
+                            <a href="{{ path('annuler_invibuttonlist',{'idreceive' : objet.user.id , 'objetenvoyer' : objectevoyer.id , 'objetreceive': objet.id }) }}" class="btn btn-danger btn-xs center">Annuler la demande</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="{{ objet.id }}" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-label">description</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p>{{ objet.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-b" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="{{ objet.id }}1" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-label">Contactez</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-md-6 center">
+                                    <br>
+                                    <div class="image-box circle-image small">
+                                        <img class="" src="{{ asset('bundles/framework/images/user.jpg') }}" alt="">
+                                    </div>
+                                    <div class="image-box-description text-center">
+                                        <h4>{{ objet.user.prenom }} {{ objet.user.nom }}</h4>
+                                        <br>
+                                        <p class="subtitle"><i class="fa fa-icon-phone"></i>{{ objet.user.telephone }}</p>
+                                        <p class="subtitle"><i class="fa fa-envelope"></i>{{ objet.user.email }}</p>
+                                        <hr class="line">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-b" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

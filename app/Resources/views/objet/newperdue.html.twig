@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Objet perdue
+{% endblock %}
+
+{% block body %}
+
+    <!-- PAGE TITLE -->
+    <section id="page-title" class="page-title-parallax page-title-center text-dark" style="background-image:url({{ asset('bundles/framework/images/parallax/page-title-parallax.jpg') }});">
+        <div class="container">
+            <div class="page-title col-md-8">
+                <h1>Déclarer un objet perdant</h1>
+                <span>Remplir les champs pour trouver l'objet trouvant</span>
+            </div>
+        </div>
+    </section>
+    <!-- END: PAGE TITLE -->
+
+    <br>
+    <div class="col-md-8 center">
+    <b><i class="fa fa-eye"></i> Description de l'objet :</b>
+    <br><br>
+
+
+    {{ form_start(form) }}
+
+        <div class="row">
+            <div class="col-xs-12 col-md-3">Categorie <span style="color: red;">*</span> :</div>
+            <div class="col-xs-12 col-md-9">
+                <select name="categorie" id="categorie" title="Select Categorie" class="form-control selectpicker">
+                    {% for cat in categorie %}
+                        {% if cat.parant == null %}
+                            <optgroup label="{{ cat.nom }}">
+                                {% for catt in categorie %}
+                                    {% if catt.parant == cat %}
+                                        <option value="{{ catt.id }}">{{ catt.nom }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </optgroup>
+                        {% endif %}
+                    {% endfor %}
+                </select></div>
+        </div>
+
+    <br><br>
+    <div class="row">
+        <div class="col-xs-12 col-md-3">Description <span style="color: red;">*</span> : </div>
+        <div class="col-xs-12 col-md-9">{{ form_widget(form.description,{'attr': {'class': 'form-control','placeholder':"Une description claire facilite l'identification de l'objet (caractéristiques distinctives, rayures, inscriptions, pièces endommagées ...)."}}) }} </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-3 ">Images :</div>
+        <div class="col-xs-12 col-md-3">{{ form_widget(form.images,{'attr':{'form-control':'form-control'}}) }}</div>
+        <div class="col-xs-12 col-md-3">{{ form_widget(form.image2,{'attr':{'form-control':'form-control'}}) }}</div>
+        <div class="col-xs-12 col-md-3">{{ form_widget(form.image3,{'attr':{'form-control':'form-control'}}) }}</div>
+    </div>
+
+    <br>
+    <b><i class="fa fa-clock"></i> Lieu et date de la perte :</b>
+    <br><br>
+
+    <em class="help-block">En cas de doute, veuillez saisir la date à laquelle vous avez vu votre article pour la dernière fois.</em>
+    <div class="row">
+        <div class="col-xs-12 col-md-3">Date de la perte <span style="color: red;">*</span> : </div>
+        <div class="col-xs-12 col-md-9">{{ form_widget(form.date,{'attr':{'form-control':'form-control '}}) }}</div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-md-3">Gouvernorat <span style="color: red;">*</span> : </div>
+        <div class="col-xs-12 col-md-9">{{ form_widget(form.gouvernorat,{'attr': {'class': 'form-control','placeholder':"S'il vous plaît entrer ici la Gouvernorat"}}) }}</div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-md-3">Conditions <span style="color: red;">*</span> : </div>
+        <div class="col-xs-12 col-md-9">{{ form_widget(form.cond,{'attr': {'class': 'form-control','placeholder':"Rue, bar, gare, concert, lieu, temps ..."}}) }}</div>
+    </div>
+    <br>
+    <b><i class="fa fa-icon-money"></i> Récompense optionnelle :</b>
+    <br>
+    <br>
+    <em class="help-block">Vous êtes invités à offrir une récompense au chercheur. La récompense est due après que votre article vous soit retourné.</em>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-3">Récompense optionnelle(en Dinar) : </div>
+        <div class="col-xs-12 col-md-9">{{  form_widget(form.recompenseOptionnelle,{'attr': {'class': 'form-control','placeholder':"DT",'type':'integer' ,'min' : 0}}) }} </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-md-12"><a href="{{ path('objet_newperdue') }}" class="btn btn-warning">Annuler</a><input name="btn_enregistrer" type="submit" class="btn btn-success" value="Publier"></div>
+    </div>
+
+    <br>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}

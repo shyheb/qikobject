@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Objets list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Emplacement</th>
+                <th>Cond</th>
+                <th>Recompenseoptionnelle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for objet in objets %}
+            <tr>
+                <td><a href="{{ path('objet_show', { 'id': objet.id }) }}">{{ objet.id }}</a></td>
+                <td>{{ objet.type }}</td>
+                <td>{{ objet.description }}</td>
+                <td>{% if objet.date %}{{ objet.date|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ objet.emplacement }}</td>
+                <td>{{ objet.cond }}</td>
+                <td>{{ objet.recompenseOptionnelle }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('objet_show', { 'id': objet.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('objet_edit', { 'id': objet.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('objet_new') }}">Create a new objet</a>
+        </li>
+    </ul>
+{% endblock %}

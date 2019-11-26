@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+        <link rel="shortcut icon" href="{{ asset('bundles/framework/images/QO.png') }}">
+        <title>{% block title %}{% endblock %}</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="{{ asset('bundles/framework/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/framework/vendor/rs-plugin/fonts/font-awesome/css/font-awesome.min.css') }}" type="text/css" rel="stylesheet">
+        <link href="{{ asset('bundles/framework/vendor/animateit/animate.css') }}" rel="stylesheet">
+
+        <!-- Vendor css -->
+        <link href="{{ asset('bundles/framework/vendor/owlcarousel/owl.carousel.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/framework/vendor/magnific-popup/magnific-popup.css') }}" rel="stylesheet">
+
+        <!-- Template base -->
+        <link href="{{ asset('bundles/framework/css/theme-base.css') }}" rel="stylesheet">
+
+        <!-- Template elements -->
+        <link href="{{ asset('bundles/framework/css/theme-elements.css') }}" rel="stylesheet">
+
+        <!-- Responsive classes -->
+        <link href="{{ asset('bundles/framework/css/responsive.css') }}" rel="stylesheet">
+
+
+        <!-- Template color -->
+        <link href="{{ asset('bundles/framework/css/color-variations/blue.css') }}" rel="stylesheet" type="text/css" media="screen" title="blue">
+
+        <!-- LOAD GOOGLE FONTS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+        <!-- SLIDER REVOLUTION 5.x CSS SETTINGS -->
+        <link rel="stylesheet" property="stylesheet" href="{{ asset('bundles/framework/vendor/rs-plugin/css/settings.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ asset('bundles/framework/css/rs-plugin-styles.css') }}" type="text/css" />
+
+        <!-- CSS CUSTOM STYLE -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/framework/css/color-variations/custom.css') }}" media="screen" />
+
+        <!--VENDOR SCRIPT-->
+        <script src="{{ asset('bundles/framework/vendor/jquery/jquery-1.11.2.min.js') }}"></script>
+        <script src="{{ asset('bundles/framework/vendor/plugins-compressed.js') }}"></script>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body class="wide">
+    <div class="wrapper">
+
+
+            <!-- HEADER -->
+            <header id="header">
+                <div id="header-wrap">
+                    <div class="container">
+
+                        <!--LOGO-->
+                        <div id="logo">
+                            <a href="{{ path('homepage') }}" class="logo" data-dark-logo="{{ asset('bundles/framework/images/logo-dark.png') }}">
+                                <img src="{{ asset('bundles/framework/images/QO.png') }}" alt="Polo Logo">
+                            </a>
+                        </div>
+                        <!--END: LOGO-->
+
+                        <!--MOBILE MENU -->
+                        <div class="nav-main-menu-responsive">
+                            <button class="lines-button x">
+                                <span class="lines"></span>
+                            </button>
+                        </div>
+                        <!--END: MOBILE MENU -->
+
+
+
+                        <!--NAVIGATION-->
+                        <div class="navbar-collapse collapse main-menu-collapse navigation-wrap">
+                            <div class="container">
+                                <nav id="mainMenu" class="main-menu mega-menu">
+                                    <ul class="main-menu nav nav-pills">
+                                        <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a>
+                                        </li>
+                                        <li><a href="{{ path('objet_newperdue') }}">J'ai perdue</a></li>
+                                        <li><a href="{{ path('objet_newtrouver') }}">J'ai trouver</a></li>
+                                        {% if user !=  '' %}
+                                            <li class="dropdown notifications-menu">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-bell"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <!-- inner menu: contains the actual data -->
+                                                        <ul class="menu">
+                                                            <li>
+                                                                <a href="#">
+                                                                    {% for contacter in contactdejaenvoyer %}
+                                                                        {% if contacter.userreceive == user  %}
+                                                                    <i class="fa fa-user"></i>
+                                                                            <a href="{{ path('afficheobjet',{'id' : contacter.objetreceive.id}) }}">Mon objet | j'ai le {{ contacter.objetreceive.type }}</a> <a href="{{ path('afficheobjet',{'id' : contacter.objetenvoyer.id}) }}">objet demande | {{ contacter.objetenvoyer.type }}</a> {{ contacter.userenvoyer.prenom }}  {{ contacter.userenvoyer.nom }} |  {{ contacter.userenvoyer.email }} | {{ contacter.userenvoyer.telephone }}
+                                                                            <a href="{{ path('supprimer_invitation',{'id': contacter.id}) }}" class="btn btn-white btn-xs">X</a>
+                                                                            <p>-------------------------------------------------------</p>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+
+                                        <li><a href=""></a></li>
+                                        <li><a href="{{ path('listobjet_user') }}">|Mes Annonces|</a></li>
+                                            <li>
+
+                                                        <!-- User Account: style can be found in dropdown.less -->
+                                                        <li class="dropdown user user-menu">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                                <img width="6%" src="{{ asset('bundles/framework/images/user.jpg') }}" class="user-image" alt="User Image">
+                                                                <span>{{ user.username }}</span>
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <!-- User image -->
+                                                                <li class="user-header">
+                                                                    <p>
+                                                                        {{ user.prenom }} {{ user.nom }}
+                                                                    </p>
+                                                                </li>
+
+
+                                                                <!-- Menu Footer-->
+                                                                <li class="user-footer row">
+                                                                    <div class="pull-left col-xs-12">
+                                                                        <a href="{{ path('fos_user_change_password',{'action':'mp'}) }}" class="btn btn-default ">Modifier Password</a>
+                                                                    </div>
+                                                                    <div class="pull-left col-xs-12">
+                                                                        <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default ">Deconnexion</a>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+
+                                            </li>
+                                        {% else %}
+                                            <li><a href=""></a></li>
+                                            <li><a href="{{ path('fos_user_security_login') }}">Connexion</a></li>
+                                            <li><a href="{{ path('fos_user_registration_register') }}">Inscription</a></li>
+
+                                        {% endif %}
+
+                                    </ul>
+
+
+                                </nav>
+                            </div>
+                        </div>
+                        <!--END: NAVIGATION-->
+                    </div>
+                </div>
+            </header>
+            <!-- END: HEADER -->
+
+
+
+        {% block body %}
+
+
+
+        {% endblock %}
+
+
+            <!-- FOOTER -->
+            <footer class="background-dark text-grey" id="footer">
+                <div class="footer-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="footer-logo float-left">
+                                    <img alt="" width="60%" src="{{ asset('bundles/framework/images/QO.png') }}">
+                                </div>
+                                <p style="margin-top: 12px;">Qik Objects connecte intelligemment ceux qui perdent et ceux qui trouvent
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="seperator seperator-dark seperator-simple"></div>
+                       <!-- row manque -->
+
+
+                    </div>
+                </div>
+                <div class="copyright-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="copyright-text col-md-6"> &copy; 2018 QIK OBJECTS - TOUS LES DROITS SONT RÉSERVÉS. <a target="_blank" href="#">shyheb</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- END: FOOTER -->
+
+            </div>
+            <!-- END: WRAPPER -->
+
+            <!-- GO TOP BUTTON -->
+            <a class="gototop gototop-button" href="#"><i class="fa fa-chevron-up"></i></a>
+
+
+
+            <!-- SLIDER REVOLUTION 5.x SCRIPTS  -->
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
+
+            <script type="text/javascript">
+                var tpj = jQuery;
+
+                var revapi30;
+                tpj(document).ready(function() {
+                    if (tpj("#rev_slider_30_1").revolution == undefined) {
+                        revslider_showDoubleJqueryError("#rev_slider_30_1");
+                    } else {
+                        revapi30 = tpj("#rev_slider_30_1").show().revolution({
+                            sliderType: "standard",
+                            jsFileLocation: "vendor/rs-plugin/js/",
+                            sliderLayout: "fullscreen",
+                            dottedOverlay: "none",
+                            delay: 9000,
+                            navigation: {
+                                keyboardNavigation: "off",
+                                keyboard_direction: "horizontal",
+                                mouseScrollNavigation: "off",
+                                onHoverStop: "on",
+                                touch: {
+                                    touchenabled: "on",
+                                    swipe_threshold: 75,
+                                    swipe_min_touches: 50,
+                                    swipe_direction: "horizontal",
+                                    drag_block_vertical: false
+                                },
+                                arrows: {
+                                    style: "hermes",
+                                    enable: true,
+                                    hide_onmobile: true,
+                                    hide_under: 600,
+                                    hide_onleave: true,
+                                    hide_delay: 200,
+                                    hide_delay_mobile: 1200,
+                                    tmp: '<div class="tp-arr-allwrapper">	<div class="tp-arr-imgholder"></div>	<div class="tp-arr-titleholder"></div>	</div>',
+                                    left: {
+                                        h_align: "left",
+                                        v_align: "center",
+                                        h_offset: 0,
+                                        v_offset: 0
+                                    },
+                                    right: {
+                                        h_align: "right",
+                                        v_align: "center",
+                                        h_offset: 0,
+                                        v_offset: 0
+                                    }
+                                }
+                            },
+                            responsiveLevels: [1240, 1024, 778, 480],
+                            visibilityLevels: [1240, 1024, 778, 480],
+                            gridwidth: [1240, 1024, 778, 480],
+                            gridheight: [868, 768, 960, 720],
+                            lazyType: "smart",
+                            shadow: 0,
+                            spinner: "off",
+                            stopLoop: "off",
+                            stopAfterLoops: -1,
+                            stopAtSlide: -1,
+                            shuffle: "off",
+                            autoHeight: "off",
+                            fullScreenAutoWidth: "off",
+                            fullScreenAlignForce: "off",
+                            fullScreenOffsetContainer: "",
+                            fullScreenOffset: "",
+                            disableProgressBar: "on",
+                            hideThumbsOnMobile: "off",
+                            hideSliderAtLimit: 0,
+                            hideCaptionAtLimit: 0,
+                            hideAllCaptionAtLilmit: 0,
+                            debugMode: false,
+                            fallbacks: {
+                                simplifyAll: "off",
+                                nextSlideOnWindowFocus: "off",
+                                disableFocusListener: false,
+                            }
+                        });
+                    }
+                });
+
+            </script>
+
+            <!-- Theme Base, Components and Settings -->
+            <script src="{{ asset('bundles/framework/js/theme-functions.js') }}"></script>
+
+            <!-- Custom js file -->
+            <script src="{{ asset('bundles/framework/js/custom.js') }}"></script>
+
+
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/extensions/revolution.extension.video.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/extensions/revolution.extension.slideanims.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/extensions/revolution.extension.actions.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/extensions/revolution.extension.layeranimation.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/framework/vendor/rs-plugin/js/extensions/revolution.extension.navigation.min.js') }}"></script>
+        {% block javascripts %}
+        {% endblock %}
+    </body>
+</html>

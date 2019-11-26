@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Affichage objet
+{% endblock %}
+{% block body %}
+    <!-- PAGE TITLE -->
+    <section id="page-title" class="page-title-parallax page-title-center text-dark" style="background-image:url({{ asset('bundles/framework/images/parallax/page-title-parallax.jpg') }});">
+        <div class="container">
+            <div class="page-title col-md-8">
+                <h1>Affiche d'un objet</h1>
+                <span>Affichage détailler sur l'objet</span>
+            </div>
+        </div>
+    </section>
+    <!-- END: PAGE TITLE -->
+
+
+    <!-- SHOP PRODUCT PAGE -->
+    <section id="product-page" class="product-page p-b-0">
+        <div class="container">
+            <div class="product">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="product-image">
+
+                            <div class="carousel" data-carousel-col="1" data-lightbox-type="gallery">
+                                {% if objet.images == '' and objet.image2 == '' and objet.image3 == ''  %}
+                                    <img class="img-rounded" src="{{ asset('bundles/framework/images/shop/products/nopicture.jpg') }}" alt="">
+                                {% else %}
+
+                                    {% if objet.images != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.images.path }}" alt="">{% endif %}
+                                    {% if objet.image2 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.image2.path }}" alt="">{% endif %}
+                                    {% if objet.image3 != '' %}<img class="img-rounded" src="{{ asset('uploads/') }}{{ objet.image3.path }}" alt="">{% endif %}
+
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-7">
+                        <div class="product-description">
+                            <div class="product-category">{{ objet.type }}</div>
+                            <div class="product-category">{{ objet.date | date }}</div>
+
+                            <div class="product-title">
+                                <h3><a href="#">{{ objet.categorie.nom }}</a></h3>
+                            </div>
+                            <div class="product-price"><ins>{% if objet.type == 'perdue' %}{{ objet.recompenseOptionnelle }}  DT{% endif %}</ins>
+                            </div>
+
+                            <div class="seperator m-b-10"></div>
+                            <p>{{ objet.description }}</p>
+                            <div class="product-meta">
+
+
+
+
+
+
+                            </div>
+                            <div class="seperator m-t-20 m-b-10"></div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- END: SHOP PRODUCT PAGE -->
+
+
+{% endblock %}

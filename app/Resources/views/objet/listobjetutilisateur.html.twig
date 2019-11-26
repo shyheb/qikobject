@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Mes Annonces
+{% endblock %}
+{% block body %}
+
+    <!-- PAGE TITLE -->
+    <section id="page-title" class="page-title-parallax page-title-center text-dark" style="background-image:url({{ asset('bundles/framework/images/parallax/page-title-parallax.jpg') }});">
+        <div class="container">
+            <div class="page-title col-md-8">
+                <h1>Mes objets publiées</h1>
+                <span>Gestion de mes objets</span>
+            </div>
+        </div>
+    </section>
+    <!-- END: PAGE TITLE -->
+
+
+
+
+    <!-- SHOP CART -->
+    <section id="shop-cart">
+        <div class="container">
+            <div class="shop-cart">
+                <div class="table table-condensed table-striped table-responsive">
+                    <!-- alert info -->
+                    <div role="alert" class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span> </button>
+                        <strong><i class="fa fa-check-circle"></i> info!</strong> Selectionner sur le nom du categorie pour faire recommandée (Matching) ces objets correspendant
+                    </div>
+                    <!-- fin alert info-->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="cart-product-remove"></th>
+                            <th class="cart-product-thumbnail">Categorie</th>
+                            <th class="cart-product-name">Type</th>
+                            <th class="cart-product-name">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for objet in objets %}
+                        <tr>
+                            <td class="cart-product-remove">
+                                <a href="#"><i class="fa fa-close"></i></a>
+                            </td>
+
+                            <td class="cart-product-thumbnail">
+                                <a href="#">
+                                    {% if objet.images != '' %}<img src="{{ asset('uploads/') }}{{ objet.images.path }}" alt="">
+                                    {% elseif objet.image2 != '' %}
+                                        <img src="{{ asset('uploads/') }}{{ objet.image2.path }}" alt="">
+
+                                    {% elseif objet.image3 != '' %}
+                                        <img src="{{ asset('uploads/') }}{{ objet.image3.path }}" alt="">
+                                        {% else %}
+                                            <img src="{{ asset('bundles/framework/images/shop/products/nopicture.jpg') }}" alt="">
+                                            {% endif %}
+
+                                </a>
+                                {% if objet.type=="trouver" %}
+                                    <div class="cart-product-thumbnail-name"><a href="{{ path('list_objetperdue',{'id': objet.id }) }}">{{ objet.categorie.nom }}</a></div>
+                                {% else %}
+                                    <div class="cart-product-thumbnail-name"><a href="{{ path('list_objettouver',{'id': objet.id }) }}">{{ objet.categorie.nom }}</a></div>
+                                {% endif %}
+                            </td>
+
+                            <td class="cart-product-description">
+                                <span class="amount">{{ objet.type }}</span>
+                            </td>
+
+                            <td class="cart-product-description">
+                                <div class="row left">
+                                <div class="col-md-4" ><form method="get" action="{{ path('afficheobjet',{'id': objet.id })}}"><button type="submit" class="btn btn-success btn-sm ">Afficher</button></form></div>
+                                    {% set i=0 %}
+                                    {% for ob in contactdejaenvoyer %}
+                                        {% if ob.objetreceive == objet or ob.objetenvoyer == objet %}
+                                            {% set i=1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if i==0 %}
+                                    <div class="col-md-4"><form method="get" action="{{ path('objet_edit',{'type': objet.type ,'id': objet.id })}}"><button type="submit" class="btn btn-primary btn-sm">Modifier</button></form></div>
+                                    <div class="col-md-4"><!--<form method="post" action="{{ path('supprimer_objet',{'id': objet.id })}}"><button type="submit" class="btn btn-danger btn-sm">Supprimer</button></form> --> <a href="#danger" data-toggle="modal" class="btn btn-danger btn-sm">Supprimer</a></div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="danger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header modal-header-danger">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h4> voulez-vous supprimer ? </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-danger">Supprimer</button> <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Annuler</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                        <!-- Modal -->
+                                    {% endif %}
+                                </div>
+                            </td>
+
+
+
+                        </tr>
+
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: SHOP CART -->
+
+{% endblock %}
